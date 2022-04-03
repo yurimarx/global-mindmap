@@ -1,0 +1,11 @@
+.fill-window {
+    padding: 10px;
+    display:flex;
+  }
+  
+  .map-container .map-canvas {
+    height: 100%;
+    padding: 10px;
+    display:flex;
+  }
+  

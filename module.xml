@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+  <Document name="global-mindmap.ZPM">
+    <Module>
+      <Name>global-mindmap</Name>
+      <Version>1.0.0</Version>
+      <Description>Store mindmap into globals</Description>
+      <Packaging>module</Packaging>
+      <SourcesRoot>src</SourcesRoot>
+      <Resource Name="dc.globalmindmap.PKG"/>
+      <Dependencies>
+        <ModuleReference>
+          <Name>swagger-ui</Name>
+          <Version>1.*.*</Version>
+        </ModuleReference>
+      </Dependencies>
+      <CSPApplication 
+        Url="/global-mindmap"
+        DispatchClass="dc.globalmindmap.GlobalMindMapRESTApp"
+        MatchRoles=":{$dbrole}"
+        PasswordAuthEnabled="0"
+        UnauthenticatedEnabled="1"
+        Recurse="1"
+        UseCookies="2"
+        CookiePath="/global-mindmap"
+       />
+    </Module>
+  </Document>
+</Export>
