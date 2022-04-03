@@ -77,13 +77,13 @@ class Mindmap extends React.Component {
     saveMindmapNode(node) {
 
         axios.post(`http://localhost:52773/global-mindmap/save`, {
-            topic: (node.topic === undefined ? "" : node.topic),
+            topic: (node.topic == undefined ? "" : node.topic),
             id: node.id,
-            style: (node.style === undefined ? "" : node.style),
-            parent: (node.parent === undefined ? "" : node.parent.id),
-            tags: (node.tags === undefined ? [] : node.tags),
-            icons: (node.icons === undefined ? [] : node.icons),
-            hyperLink: (node.hyperLink === undefined ? "" : node.hyperLink)
+            style: (node.style == undefined ? "" : node.style),
+            parent: (node.parent == undefined ? "" : node.parent.id),
+            tags: (node.tags == undefined ? [] : node.tags),
+            icons: (node.icons == undefined ? [] : node.icons),
+            hyperLink: (node.hyperLink == undefined ? "" : node.hyperLink)
         })
             .then(res => {
                 console.log(res);

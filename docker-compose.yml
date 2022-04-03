@@ -11,3 +11,13 @@ services:
       - 53773:53773
     volumes:
       - ./:/irisrun/repo
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    container_name: frontend
+    stdin_open: true
+    volumes:
+       - ./frontend:/usr/src/app/frontend
+       - /usr/src/app/frontend/node_modules
