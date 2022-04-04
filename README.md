@@ -24,8 +24,5 @@ $ docker-compose up -d
 4. Go to http://localhost:3000 to use the Mindmap frontend
 
 
-# To be done:
-It Will be provided a frontend to the user
-
 # Credits
 This application used mind-elixir project

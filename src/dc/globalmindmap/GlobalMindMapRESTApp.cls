@@ -118,35 +118,24 @@ ClassMethod GetMindmap() As %Status
       
       Set Nodes = []
 
-      Set OriginalNode = $Query(^mindmap(""))
-      Set Count = 1
-      Set Node = {}
-      Set Node.style = {}
-      While (OriginalNode '= "") {
-        If Count = 1 {
-          Set Node.id = $Order(^mindmap(OriginalNode))
-        } ElseIf Count = 2 {
-          Set Node.hyperLink = $Order(^mindmap(OriginalNode))
-        } ElseIf Count = 3 {
-          Set Node.icons = $Order(^mindmap(OriginalNode))
-        } ElseIf Count = 4 {
-          Set Node.parent = $Order(^mindmap(OriginalNode))
-        } ElseIf Count = 5 {
-          Set Node.style.background = $Order(^mindmap(OriginalNode))
-        } ElseIf Count = 6 {
-          Set Node.style.color = $Order(^mindmap(OriginalNode))
-        } ElseIf Count = 7 {
-          Set Node.style.fontSize = $Order(^mindmap(OriginalNode))
-        } ElseIf Count = 8 {
-          Set Node.tags = $Order(^mindmap(OriginalNode))
-        } ElseIf Count = 9 {
-          Set Node.topic = $Order(^mindmap(OriginalNode))
-          Do Nodes.%Push(Node)
-          Set Count = 1
-        }
-        Set Count = Count + 1
-
-        Set OriginalNode = $Query(@OriginalNode)
+      Set Key = $Order(^mindmap(""))
+      Set Row = 0
+      
+      While (Key '= "") {
+        Do Nodes.%Push({})
+        Set Nodes.%Get(Row).style = {}
+        Set Nodes.%Get(Row).id = Key
+        Set Nodes.%Get(Row).hyperLink = ^mindmap(Key,"hyperLink")
+        Set Nodes.%Get(Row).icons = ^mindmap(Key,"icons")
+        Set Nodes.%Get(Row).parent = ^mindmap(Key,"parent")
+        Set Nodes.%Get(Row).style.background = ^mindmap(Key,"style", "background")
+        Set Nodes.%Get(Row).style.color = ^mindmap(Key,"style", "color")
+        Set Nodes.%Get(Row).style.fontSize = ^mindmap(Key,"style", "fontSize")
+        Set Nodes.%Get(Row).tags = ^mindmap(Key,"tags")
+        Set Nodes.%Get(Row).topic = ^mindmap(Key,"topic")
+        Set Row = Row + 1
+        
+        Set Key = $Order(^mindmap(Key))
       }
       
       Set %response.Status = 200

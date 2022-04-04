@@ -12,25 +12,30 @@ class Mindmap extends React.Component {
         axios.get(`http://localhost:52773/global-mindmap/hasContent`)
             .then(res => {
                 if (res.data == "1") {
-                    this.ME = new MindElixir({
-                        el: "#map",
-                        direction: MindElixir.LEFT,
-                        data: MindElixir.new("has data - I will bring"),
-                        draggable: true, // default true
-                        contextMenu: true, // default true
-                        toolBar: true, // default true
-                        nodeMenu: true, // default true
-                        keypress: true // default true
-                    });
-                    this.ME.bus.addListener('operation', operation => {
-                        console.log(operation)
-            
-                        if (operation.name == 'finishEdit') {
-                            this.saveMindmapNode(operation.obj)
-                        } else if (operation.name == 'removeNode') {
-                            this.deleteMindmapNode(operation.obj.id)
-                        }
-                    })
+                    axios.get(`http://localhost:52773/global-mindmap/get`)
+                        .then(res2 => {
+                            this.ME = new MindElixir({
+                                el: "#map",
+                                direction: MindElixir.LEFT,
+                                data: this.renderExistentMindmap(res2.data),
+                                draggable: true, // default true
+                                contextMenu: true, // default true
+                                toolBar: true, // default true
+                                nodeMenu: true, // default true
+                                keypress: true // default true
+                            });
+                            this.ME.bus.addListener('operation', operation => {
+                                console.log(operation)
+                    
+                                if (operation.name == 'finishEdit') {
+                                    this.saveMindmapNode(operation.obj)
+                                } else if (operation.name == 'removeNode') {
+                                    this.deleteMindmapNode(operation.obj.id)
+                                }
+                            })
+                            this.ME.init();
+                        })
+                    
                 } else {
                     this.ME = new MindElixir({
                         el: "#map",
@@ -52,9 +57,10 @@ class Mindmap extends React.Component {
                         }
                     })
                     this.saveMindmapNode(this.ME.nodeData)
+                    this.ME.init();
                 }
 
-                this.ME.init();
+                
             })
 
 
@@ -90,6 +96,51 @@ class Mindmap extends React.Component {
                 console.log(res.data);
             })
     }
+
+    renderExistentMindmap(data) {
+        
+        let root = data[0]
+
+        let nodeData = {
+            id: root.id,
+            topic: root.topic,
+            root: true,
+            style: {
+                background: root.style.background,
+                color: root.style.color,
+                fontSize: root.style.fontSize,
+            },
+            hyperLink: root.hyperLink,
+            children: []
+        }
+
+        this.createTree(nodeData, data)
+
+        return { nodeData }
+    }
+
+    createTree(nodeData, data) {
+        for(let i = 1; i < data.length; i++) {
+            if(data[i].parent == nodeData.id) {
+                let newNode = {
+                    id: data[i].id,
+                    topic: data[i].topic,
+                    root: false,
+                    style: {
+                        background: data[i].style.background,
+                        color: data[i].style.color,
+                        fontSize: data[i].style.fontSize,
+                    },
+                    hyperLink: data[i].hyperLink,
+                    children: []
+                }
+                nodeData.children.push(newNode)
+                this.createTree(newNode, data)
+            }
+        }
+    }
+
+    
 }
 
 export default Mindmap;
