@@ -27,7 +27,7 @@ class Mindmap extends React.Component {
                             this.ME.bus.addListener('operation', operation => {
                                 console.log(operation)
                     
-                                if (operation.name == 'finishEdit') {
+                                if (operation.name == 'finishEdit' || operation.name == 'editStyle') {
                                     this.saveMindmapNode(operation.obj)
                                 } else if (operation.name == 'removeNode') {
                                     this.deleteMindmapNode(operation.obj.id)

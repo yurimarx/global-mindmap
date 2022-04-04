@@ -21,7 +21,10 @@ $ docker-compose build
 $ docker-compose up -d 
 ```
 
-4. Go to http://localhost:3000 to use the Mindmap frontend
+4. Go to http://localhost:3000 to use the Mindmap frontend and create mindmaps like this:
+
+![Mindmap](https://github.com/yurimarx/global-mindmap/raw/main/mindmap.png "Mindmap")
+
 
 
 # Credits
