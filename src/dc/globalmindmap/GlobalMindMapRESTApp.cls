@@ -38,122 +38,71 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 /// Store mindmap node
 ClassMethod StoreMindmapNode() As %Status
 {
-    Try {
-      
-      Set data = {}.%FromJSON(%request.Content)
-      
-      Set ^mindmap(data.id) = data.id
-      Set ^mindmap(data.id, "topic") = data.topic
-      Set ^mindmap(data.id, "style", "fontSize") = data.style.fontSize
-      Set ^mindmap(data.id, "style", "color") = data.style.color
-      Set ^mindmap(data.id, "style", "background") = data.style.background
-      Set ^mindmap(data.id, "parent") = data.parent
-      Set ^mindmap(data.id, "tags") = data.tags.%ToJSON()
-      Set ^mindmap(data.id, "icons") = data.icons.%ToJSON()
-      Set ^mindmap(data.id, "hyperLink") = data.hyperLink
-      
-      Set %response.Status = 200
-      Set %response.Headers("Access-Control-Allow-Origin")="*"
+  Try {
+    
+    Set data = {}.%FromJSON(%request.Content) 
+    
+    Set sc = ##class(dc.globalmindmap.GlobalMindMapService).StoreMindmapNode(data)
+    
+    Set %response.Status = 200
+    Set %response.Headers("Access-Control-Allow-Origin")="*"
+    
+    If sc = 1 {
       Write "Saved"
-      Return $$$OK
-    } Catch err {
-      write !, "Error name: ", ?20, err.Name,
-          !, "Error code: ", ?20, err.Code,
-          !, "Error location: ", ?20, err.Location,
-          !, "Additional data: ", ?20, err.Data, !
-      Return $$$NOTOK
+    } Else {
+      Write "Not saved"
+    }
+    
+    Return sc
+
+  } Catch err {
+    write !, "Error name: ", ?20, err.Name,
+        !, "Error code: ", ?20, err.Code,
+        !, "Error location: ", ?20, err.Location,
+        !, "Additional data: ", ?20, err.Data, !
+    Return $$$NOTOK
   }
 }
 
 /// Delete mindmap node
 ClassMethod DeleteMindmapNode(id As %String) As %Status
 {
-    Try {
       
-      Kill ^mindmap(id)
-      
-      Set %response.Status = 200
-      Set %response.Headers("Access-Control-Allow-Origin")="*"
-      Write "Deleted"
-      Return $$$OK
-    } Catch err {
-      write !, "Error name: ", ?20, err.Name,
-          !, "Error code: ", ?20, err.Code,
-          !, "Error location: ", ?20, err.Location,
-          !, "Additional data: ", ?20, err.Data, !
-      Return $$$NOTOK
-  }
+  Set sc = ##class(dc.globalmindmap.GlobalMindMapService).DeleteMindmapNode(id)
+
+  Set %response.Status = 200
+  Set %response.Headers("Access-Control-Allow-Origin")="*"
+
+  Write "Deleted"
+
+  Return sc
 }
 
 /// Has content: 1 - yes, 0 - no
 ClassMethod HasContent() As %Status
 {
-  Try {
-      
-      Set %response.Status = 200
-      Set %response.Headers("Access-Control-Allow-Origin")="*"
-      
-      Set key = $Order(^mindmap(""))
-      
-      If key = "" {
-        Write "0"
-      } Else {
-        Write "1"
-      }
+  
+  Set %response.Status = 200
+  Set %response.Headers("Access-Control-Allow-Origin")="*"
 
-      Return $$$OK
-    } Catch err {
-      write !, "Error name: ", ?20, err.Name,
-          !, "Error code: ", ?20, err.Code,
-          !, "Error location: ", ?20, err.Location,
-          !, "Additional data: ", ?20, err.Data, !
-      Return $$$NOTOK
-  }
+  Set sc = ##class(dc.globalmindmap.GlobalMindMapService).HasContent(.Result)
+
+  Write Result
+
+  Return sc
 }
 
 /// Get mindmap content
 ClassMethod GetMindmap() As %Status
 {
-    Try {
-      
-      Set Nodes = []
 
-      Set Key = $Order(^mindmap(""))
-      Set Row = 0
-      
-      While (Key '= "") {
-        Do Nodes.%Push({})
-        Set Nodes.%Get(Row).style = {}
-        Set Nodes.%Get(Row).id = Key
-        Set Nodes.%Get(Row).hyperLink = ^mindmap(Key,"hyperLink")
-        Set Nodes.%Get(Row).icons = ^mindmap(Key,"icons")
-        Set Nodes.%Get(Row).parent = ^mindmap(Key,"parent")
-        Set Nodes.%Get(Row).style.background = ^mindmap(Key,"style", "background")
-        Set Nodes.%Get(Row).style.color = ^mindmap(Key,"style", "color")
-        Set Nodes.%Get(Row).style.fontSize = ^mindmap(Key,"style", "fontSize")
-        Set Nodes.%Get(Row).tags = ^mindmap(Key,"tags")
-        Set Nodes.%Get(Row).topic = ^mindmap(Key,"topic")
-        Set Row = Row + 1
-        
-        Set Key = $Order(^mindmap(Key))
-      }
-      
-      Set %response.Status = 200
-      Set %response.Headers("Access-Control-Allow-Origin")="*"
-      Write Nodes.%ToJSON()
-      Return $$$OK
-    } Catch err {
-      write !, "Error name: ", ?20, err.Name,
-          !, "Error code: ", ?20, err.Code,
-          !, "Error location: ", ?20, err.Location,
-          !, "Additional data: ", ?20, err.Data, !
-      Return $$$NOTOK
-  }
-}
+  Set sc = ##class(dc.globalmindmap.GlobalMindMapService).GetMindmap(.Nodes)  
 
-ClassMethod ConvertToMindnodeFormat(OriginalNode)
-{
-  Set Node = {}
+  Set %response.Status = 200
+  Set %response.Headers("Access-Control-Allow-Origin")="*"
+  Write Nodes.%ToJSON()
+
+  Return sc
 }
 
 /// General information
