@@ -4,15 +4,22 @@ import axios from 'axios';
 
 class Mindmap extends React.Component {
 
+    getIpAddress() {
+        return window.location.hostname;
+    }
+    
+
     componentDidMount() {
 
         this.dynamicWidth = window.innerWidth;
         this.dynamicHeight = window.innerHeight;
-        
-        axios.get(`http://localhost:52773/global-mindmap/hasContent`)
+
+        const ipaddress = this.getIpAddress();
+
+        axios.get(`http://${ipaddress}:52773/global-mindmap/hasContent`)
             .then(res => {
                 if (res.data == "1") {
-                    axios.get(`http://localhost:52773/global-mindmap/get`)
+                    axios.get(`http://${ipaddress}:52773/global-mindmap/get`)
                         .then(res2 => {
                             this.ME = new MindElixir({
                                 el: "#map",
@@ -73,7 +80,7 @@ class Mindmap extends React.Component {
     }
 
     deleteMindmapNode(mindmapNodeId) {
-        axios.delete(`http://localhost:52773/global-mindmap/delete/${mindmapNodeId}`)
+        axios.delete(`http://${this.getIpAddress()}:52773/global-mindmap/delete/${mindmapNodeId}`)
             .then(res => {
                 console.log(res);
                 console.log(res.data);
@@ -82,7 +89,7 @@ class Mindmap extends React.Component {
 
     saveMindmapNode(node) {
 
-        axios.post(`http://localhost:52773/global-mindmap/save`, {
+        axios.post(`http://${this.getIpAddress()}:52773/global-mindmap/save`, {
             topic: (node.topic == undefined ? "" : node.topic),
             id: node.id,
             style: (node.style == undefined ? "" : node.style),
