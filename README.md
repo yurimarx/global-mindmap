@@ -25,7 +25,20 @@ $ docker-compose up -d
 
 ![Mindmap](https://github.com/yurimarx/global-mindmap/raw/main/mindmap.gif "Mindmap")
 
-
+# If you want to test backend API services
+1. Go to Terminal, namespace IRISAPP:
+```
+USER>zn "IRISAPP"
+```
+2. Set UnitTest Suite folder
+```
+IRISAPP>Set ^UnitTestRoot="/opt/irisbuild/src"
+```
+3. Execute unit tests
+```
+IRISAPP>do ##class(%UnitTest.Manager).RunTest("UnitTests")
+```
+4. See test results in http://localhost:52773/csp/sys/%25UnitTest.Portal.Indices.cls?Index=1&$NAMESPACE=IRISAPP
 
 # Credits
 This application used mind-elixir project

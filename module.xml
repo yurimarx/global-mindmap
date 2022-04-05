@@ -8,6 +8,7 @@
       <Packaging>module</Packaging>
       <SourcesRoot>src</SourcesRoot>
       <Resource Name="dc.globalmindmap.PKG"/>
+      <UnitTest Name="/src" Package="UnitTests" Phase="test"/>
       <Dependencies>
         <ModuleReference>
           <Name>swagger-ui</Name>
