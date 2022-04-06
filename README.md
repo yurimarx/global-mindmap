@@ -1,5 +1,6 @@
-
 ## About Global-Mindmap Application
+ [![Quality Gate Status](https://community.objectscriptquality.com/api/project_badges/measure?project=intersystems_iris_community%2Fglobal-mindmap&metric=alert_status)](https://community.objectscriptquality.com/dashboard?id=intersystems_iris_community%2Fglobal-mindmap)
+
 This is a Mindmap application using globals to store mindmap nodes
 
 ## Installation
