@@ -109,7 +109,6 @@ ClassMethod GetMindmap() As %Status
 ClassMethod GetInfo() As %Status
 {
   SET version = ..#Version
-  SET fmt=##class(%SYS.NLS.Format).%New("ptbw")
   
   SET info = {
     "Service": "3DES Service API",
@@ -127,7 +126,6 @@ ClassMethod GetInfo() As %Status
 
 ClassMethod SwaggerSpec() As %Status
 {
-  Set tSC = ##class(%REST.API).GetWebRESTApplication($NAMESPACE, %request.Application, .swagger)
   Do swagger.info.%Remove("x-ISC_Namespace")
   Set swagger.basePath = "/iris-tts" 
   Set swagger.info.title = "TTS Service API"

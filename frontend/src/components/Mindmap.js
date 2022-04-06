@@ -1,5 +1,5 @@
 import React from "react";
-import MindElixir, { E } from "mind-elixir";
+import MindElixir from "mind-elixir";
 import axios from 'axios';
 
 class Mindmap extends React.Component {
