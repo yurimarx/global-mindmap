@@ -1,5 +1,6 @@
 import React from "react";
 import MindElixir from "mind-elixir";
+import painter from 'mind-elixir/dist/painter';
 import axios from 'axios';
 
 class Mindmap extends React.Component {
@@ -29,7 +30,31 @@ class Mindmap extends React.Component {
                                 contextMenu: true, // default true
                                 toolBar: true, // default true
                                 nodeMenu: true, // default true
-                                keypress: true // default true
+                                keypress: true, // default true
+                                contextMenuOption: {
+                                    focus: true,
+                                    link: true,
+                                    extend: [
+                                      {
+                                        name: 'Export as PNG Image',
+                                        onclick: () => {
+                                            painter.exportPng(this.ME, 'mindmap.png')
+                                        },
+                                      },
+                                      {
+                                        name: 'Export as SVG Image',
+                                        onclick: () => {
+                                            painter.exportSvg(this.ME, 'mindmap')
+                                        },
+                                      },
+                                      {
+                                        name: 'Export as Markdown',
+                                        onclick: () => {
+                                            this.downloadMD('mindmap.md',this.ME.getAllDataMd())
+                                        },
+                                      },
+                                    ],
+                                },
                             });
                             this.ME.bus.addListener('operation', operation => {
                                 console.log(operation)
@@ -52,7 +77,31 @@ class Mindmap extends React.Component {
                         contextMenu: true, // default true
                         toolBar: true, // default true
                         nodeMenu: true, // default true
-                        keypress: true // default true
+                        keypress: true, // default true
+                        contextMenuOption: {
+                            focus: true,
+                            link: true,
+                            extend: [
+                                {
+                                  name: 'Export as PNG Image',
+                                  onclick: () => {
+                                      painter.exportPng(this.ME, 'mindmap.png')
+                                  },
+                                },
+                                {
+                                  name: 'Export as SVG Image',
+                                  onclick: () => {
+                                      painter.exportSvg(this.ME, 'mindmap')
+                                  },
+                                },
+                                {
+                                    name: 'Export as Markdown',
+                                    onclick: () => {
+                                        this.downloadMD('mindmap.md',this.ME.getAllDataMd())
+                                    },
+                                  },
+                              ],
+                        },
                     });
                     this.ME.bus.addListener('operation', operation => {
                         console.log(operation)
@@ -146,6 +195,19 @@ class Mindmap extends React.Component {
             }
         }
     }
+
+    downloadMD(filename, text) {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+      
+        element.style.display = 'none';
+        document.body.appendChild(element);
+      
+        element.click();
+      
+        document.body.removeChild(element);
+      }
 
     
 }
