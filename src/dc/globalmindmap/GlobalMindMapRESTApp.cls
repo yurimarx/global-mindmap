@@ -126,9 +126,10 @@ ClassMethod GetInfo() As %Status
 
 ClassMethod SwaggerSpec() As %Status
 {
+  Do ##class(%REST.API).GetWebRESTApplication($NAMESPACE, %request.Application, .swagger)
   Do swagger.info.%Remove("x-ISC_Namespace")
-  Set swagger.basePath = "/iris-tts" 
-  Set swagger.info.title = "TTS Service API"
+  Set swagger.basePath = "/global-mindmap" 
+  Set swagger.info.title = "Global Mindmap Service API"
   Set swagger.info.version = "1.0"
   Set swagger.host = "localhost:52773"
   Return ..%ProcessResult($$$OK, swagger)
