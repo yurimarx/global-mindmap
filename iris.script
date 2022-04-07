@@ -4,6 +4,7 @@
     // create IRISAPP namespace
     do $SYSTEM.OBJ.Load("/opt/irisbuild/Installer.cls", "ck") 
     set sc = ##class(App.Installer).setup() 
+    set sc = ##class(App.Installer).SetAppProperties("/mindmap","/opt/irisbuild/src/csp/")
 
     // load all the code of the project as a ZPM package
     zn "IRISAPP"

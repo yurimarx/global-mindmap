@@ -3,7 +3,14 @@
 
 This is a Mindmap application using globals to store mindmap nodes
 
-## Installation
+## Installation using ZPM
+1. Execute this command from IRIS Terminal:
+```
+zpm "install global-mindmap"
+```
+2. Access Mindmap UI: http://localhost:52773/mindmap/index.html
+
+## Installation using Docker Compose
 1. Clone/git pull the repo into any local directory
 
 ```
@@ -22,7 +29,7 @@ $ docker-compose build
 $ docker-compose up -d 
 ```
 
-4. Go to http://localhost:3000 to use the Mindmap frontend and create mindmaps like this:
+4. Go to http://localhost:3000 or http://localhost:52773/mindmap/index.html to use the Mindmap frontend and create mindmaps like this:
 
 ![Mindmap](https://github.com/yurimarx/global-mindmap/raw/main/mindmap.gif "Mindmap")
 

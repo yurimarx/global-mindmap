@@ -6,7 +6,7 @@
       <Version>1.0.0</Version>
       <Description>Store mindmap into globals</Description>
       <Packaging>module</Packaging>
-      <SourcesRoot>src</SourcesRoot>
+      <SourcesRoot>src/iris</SourcesRoot>
       <Resource Name="dc.globalmindmap.PKG"/>
       <UnitTest Name="/src" Package="UnitTests" Phase="test"/>
       <Dependencies>
@@ -15,6 +15,7 @@
           <Version>1.*.*</Version>
         </ModuleReference>
       </Dependencies>
+      
       <CSPApplication 
         Url="/global-mindmap"
         DispatchClass="dc.globalmindmap.GlobalMindMapRESTApp"
@@ -24,7 +25,23 @@
         Recurse="1"
         UseCookies="2"
         CookiePath="/global-mindmap"
-       />
+      />
+      
+      <CSPApplication 
+        CookiePath="/mindmap/" 
+        DefaultTimeout="900" 
+        SourcePath="/src/csp" 
+        DeployPath="${cspdir}/csp/${namespace}/"
+        MatchRoles=":{$dbrole}" 
+        PasswordAuthEnabled="1" 
+        Recurse="1"
+        ServeFiles="1" 
+        ServeFilesTimeout="3600" 
+        UnauthenticatedEnabled="0" 
+        Url="/mindmap" 
+        UseSessionCookie="2"
+      />
+      
     </Module>
   </Document>
 </Export>

@@ -13,6 +13,7 @@ XData setup
     <Configuration>
       <Database Name="${Namespace}" Dir="${mgrdir}${database}/data" Create="yes" Resource="%DB_${Namespace}"/>
     </Configuration>
+    <CSPApplication Url="/mindmap" Directory="/opt/irisbuild/src/csp/" ServeFiles="1" Recurse="1" Grant="%DB_${NAMESPACE},%SQL" AuthenticationMethods="32" />
   </Namespace>
 </Manifest>
 }
