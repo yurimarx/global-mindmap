@@ -8,6 +8,45 @@ class Mindmap extends React.Component {
     getIpAddress() {
         return window.location.hostname;
     }
+
+    getMindmapOptions(dataToRender) {
+        return (
+            {
+                el: "#map",
+                direction: MindElixir.LEFT,
+                data: dataToRender == null ? MindElixir.new("New Mindmap") : this.renderExistentMindmap(dataToRender),
+                draggable: true, // default true
+                contextMenu: true, // default true
+                toolBar: true, // default true
+                nodeMenu: true, // default true
+                keypress: true, // default true
+                contextMenuOption: {
+                    focus: true,
+                    link: true,
+                    extend: [
+                    {
+                        name: 'Export as PNG Image',
+                        onclick: () => {
+                            painter.exportPng(this.ME, 'mindmap.png')
+                        },
+                    },
+                    {
+                        name: 'Export as SVG Image',
+                        onclick: () => {
+                            painter.exportSvg(this.ME, 'mindmap')
+                        },
+                    },
+                    {
+                        name: 'Export as Markdown',
+                        onclick: () => {
+                            this.downloadMD('mindmap.md',this.ME.getAllDataMd())
+                        },
+                    },
+                    ],
+                },
+        });
+        
+    }
     
 
     componentDidMount() {
@@ -22,104 +61,34 @@ class Mindmap extends React.Component {
                 if (res.data == "1") {
                     axios.get(`http://${ipaddress}:52773/global-mindmap/get`)
                         .then(res2 => {
-                            this.ME = new MindElixir({
-                                el: "#map",
-                                direction: MindElixir.LEFT,
-                                data: this.renderExistentMindmap(res2.data),
-                                draggable: true, // default true
-                                contextMenu: true, // default true
-                                toolBar: true, // default true
-                                nodeMenu: true, // default true
-                                keypress: true, // default true
-                                contextMenuOption: {
-                                    focus: true,
-                                    link: true,
-                                    extend: [
-                                      {
-                                        name: 'Export as PNG Image',
-                                        onclick: () => {
-                                            painter.exportPng(this.ME, 'mindmap.png')
-                                        },
-                                      },
-                                      {
-                                        name: 'Export as SVG Image',
-                                        onclick: () => {
-                                            painter.exportSvg(this.ME, 'mindmap')
-                                        },
-                                      },
-                                      {
-                                        name: 'Export as Markdown',
-                                        onclick: () => {
-                                            this.downloadMD('mindmap.md',this.ME.getAllDataMd())
-                                        },
-                                      },
-                                    ],
-                                },
-                            });
-                            this.ME.bus.addListener('operation', operation => {
-                                console.log(operation)
-                    
-                                if (operation.name == 'finishEdit' || operation.name == 'editStyle') {
-                                    this.saveMindmapNode(operation.obj)
-                                } else if (operation.name == 'removeNode') {
-                                    this.deleteMindmapNode(operation.obj.id)
-                                }
-                            })
-                            this.ME.init();
+                            this.ME = new MindElixir(this.getMindmapOptions(res2.data))
+                            this.initME();
                         })
                     
                 } else {
-                    this.ME = new MindElixir({
-                        el: "#map",
-                        direction: MindElixir.LEFT,
-                        data: MindElixir.new("New Mindmap"),
-                        draggable: true, // default true
-                        contextMenu: true, // default true
-                        toolBar: true, // default true
-                        nodeMenu: true, // default true
-                        keypress: true, // default true
-                        contextMenuOption: {
-                            focus: true,
-                            link: true,
-                            extend: [
-                                {
-                                  name: 'Export as PNG Image',
-                                  onclick: () => {
-                                      painter.exportPng(this.ME, 'mindmap.png')
-                                  },
-                                },
-                                {
-                                  name: 'Export as SVG Image',
-                                  onclick: () => {
-                                      painter.exportSvg(this.ME, 'mindmap')
-                                  },
-                                },
-                                {
-                                    name: 'Export as Markdown',
-                                    onclick: () => {
-                                        this.downloadMD('mindmap.md',this.ME.getAllDataMd())
-                                    },
-                                  },
-                              ],
-                        },
-                    });
-                    this.ME.bus.addListener('operation', operation => {
-                        console.log(operation)
-            
-                        if (operation.name == 'finishEdit' || operation.name == 'editStyle') {
-                            this.saveMindmapNode(operation.obj)
-                        } else if (operation.name == 'removeNode') {
-                            this.deleteMindmapNode(operation.obj.id)
-                        }
-                    })
+                    this.ME = new MindElixir(this.getMindmapOptions(null));
                     this.saveMindmapNode(this.ME.nodeData)
-                    this.ME.init();
+                    this.initME();
+                   
                 }
 
                 
             })
 
 
+    }
+
+    initME() {
+        this.ME.bus.addListener('operation', operation => {
+            console.log(operation)
+
+            if (operation.name == 'finishEdit' || operation.name == 'editStyle') {
+                this.saveMindmapNode(operation.obj)
+            } else if (operation.name == 'removeNode') {
+                this.deleteMindmapNode(operation.obj.id)
+            }
+        })
+        this.ME.init();
     }
 
     render() {
