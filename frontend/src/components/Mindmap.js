@@ -13,7 +13,7 @@ class Mindmap extends React.Component {
         return (
             {
                 el: "#map",
-                direction: MindElixir.LEFT,
+                direction: MindElixir.SIDE,
                 data: dataToRender == null ? MindElixir.new("New Mindmap") : this.renderExistentMindmap(dataToRender),
                 draggable: true, // default true
                 contextMenu: true, // default true
